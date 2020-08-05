@@ -8,6 +8,7 @@
 using namespace std;
 using std::string;
 
+
 int m,n;
 char img[250][250];
 
