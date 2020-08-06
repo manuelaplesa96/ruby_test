@@ -27,7 +27,7 @@ vector<string> tokenize(string const & str, char delimiter)
 }
 
 void colorPixel(int x,int y,string color){
-    cout << x << " " << y <<endl;
+    //cout << x << " " << y <<endl;
     if(x<0 || x>n || y<0 || y>m){
         cout << "Wrong parameters!" <<endl;
         return;
@@ -36,9 +36,19 @@ void colorPixel(int x,int y,string color){
     img[x][y]=color[0];
 }
 
-void fillRegion(int x,int y,string color,char old_color)
+void fillRegion(int x,int y,string color, char old_color)
 {
+    /*int x,y;
+    if(isNumber(x_) && isNumber(y_))
+        x=stoi(x_),y=stoi(y_);
+    else{
+        cout << "Wrong parameters!" <<endl;
+        return;
+    }*/
+
+    //char old_color=img[x][y];
     int old_x=x,old_y=y;
+    
     colorPixel(x,y,color);
     while(img[++x][y]==old_color && x<=n){
         colorPixel(x,y,color);
@@ -55,6 +65,7 @@ void fillRegion(int x,int y,string color,char old_color)
     while(img[x][--y]==old_color && y>=0){
         colorPixel(x,y,color);
     }
+
     x=old_x,y=old_y;
     if(img[x-1][y-1]==old_color)
         fillRegion(x-1,y-1,color,old_color);
@@ -67,6 +78,20 @@ void fillRegion(int x,int y,string color,char old_color)
     if(x>n || x<1 || y>m || y<1)
         return;
 }
+
+/*void colorRegion(string x_,string y_,string color)
+{
+    int x,y;
+    if(isNumber(x_) && isNumber(y_))
+        x=stoi(x_),y=stoi(y_);
+    else{
+        cout << "Wrong parameters!" <<endl;
+        return;
+    }
+
+    char old_color=img[x-1][y-1];
+    fillRegion(x-1,y-1,color,old_color);
+}*/
 
 void initializePicture(string m_,string n_)
 {
@@ -112,9 +137,8 @@ void colorVerticalSegment(string x_,string y1_,string y2_,string color)
     }
    
     int r;
-    for(r=y1-1;r<y2;r++){
-        cout << "tu" <<endl;
-        colorPixel(r,x-1,color);} 
+    for(r=y1-1;r<y2;r++)
+        colorPixel(r,x-1,color);
 }
 
 void colorHorizontalSegment(string x1_,string x2_,string y_,string color)
@@ -130,20 +154,6 @@ void colorHorizontalSegment(string x1_,string x2_,string y_,string color)
     int c;
     for(c=x1-1;c<x2;c++)
         colorPixel(y-1,c,color);
-}
-
-void colorRegion(string x_,string y_,string color)
-{
-    int x,y;
-    if(isNumber(x_) && isNumber(y_))
-        x=stoi(x_),y=stoi(y_);
-    else{
-        cout << "Wrong parameters!" <<endl;
-        return;
-    }
-
-    char old_color=img[x-1][y-1];
-    fillRegion(x-1,y-1,color,old_color);
 }
 
 void showPicture()
@@ -187,7 +197,7 @@ int main()
             colorHorizontalSegment(tokenized[1],tokenized[2],tokenized[3],tokenized[4]);
             break;
         case 'F':
-            colorRegion(tokenized[1],tokenized[2],tokenized[3]);
+            fillRegion(stoi(tokenized[1])-1,stoi(tokenized[2])-1,tokenized[3],img[stoi(tokenized[1])-1][stoi(tokenized[2])-1]);
             break;
         case 'S':
             showPicture();
