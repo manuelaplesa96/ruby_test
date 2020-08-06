@@ -9,8 +9,17 @@ using namespace std;
 using std::string;
 
 
-int m=250,n=250;
-char img[250][250];
+int m,n;
+//char img[250][250];
+string **img;
+
+bool validCoordinates(int x,int y){
+    return (x<n && x>=0 && y<m && y>=0);
+}
+
+void displayMessage(){
+    cout << "Wrong parameters!" <<endl;
+}
 
 vector<string> tokenize(string const & str, char delimiter)
 {
@@ -27,79 +36,51 @@ vector<string> tokenize(string const & str, char delimiter)
 }
 
 void colorPixel(int x,int y,string color){
-    //cout << x << " " << y <<endl;
-    if(x<0 || x>n || y<0 || y>m){
-        cout << "Wrong parameters!" <<endl;
-        return;
+    if(!validCoordinates(x,y)){
+        return displayMessage();
     }
 
-    img[x][y]=color[0];
+    img[x][y]=color;
 }
 
-void fillRegion(int x,int y,string color, char old_color)
-{
-    /*int x,y;
-    if(isNumber(x_) && isNumber(y_))
-        x=stoi(x_),y=stoi(y_);
-    else{
-        cout << "Wrong parameters!" <<endl;
-        return;
-    }*/
+string getColor(int x,int y){
+    if(!validCoordinates(x,y)){
+        return "";
+    }
+    return img[x][y];
+}
 
-    //char old_color=img[x][y];
-    int old_x=x,old_y=y;
-    
+void fillRegion(int x,int y,string color)
+{   
+    string current_color=getColor(x,y);
     colorPixel(x,y,color);
-    while(img[++x][y]==old_color && x<=n){
-        colorPixel(x,y,color);
-    }
-    x=old_x,y=old_y;
-    while(img[x][++y]==old_color && y<=m){
-        colorPixel(x,y,color);
-    }
-    x=old_x,y=old_y;
-    while(img[--x][y]==old_color && x>=0){
-        colorPixel(x,y,color);
-    }
-    x=old_x,y=old_y;
-    while(img[x][--y]==old_color && y>=0){
-        colorPixel(x,y,color);
-    }
-
-    x=old_x,y=old_y;
-    if(img[x-1][y-1]==old_color)
-        fillRegion(x-1,y-1,color,old_color);
-    if(img[x-1][y+1]==old_color)
-        fillRegion(x-1,y+1,color,old_color);
-    if(img[x+1][y-1]==old_color)
-        fillRegion(x+1,y-1,color,old_color);
-    if(img[x+1][y+1]==old_color)
-        fillRegion(x+1,y+1,color,old_color);
-    if(x>n || x<1 || y>m || y<1)
+    
+    if(current_color=="")
         return;
+    if(getColor(x,y-1)==current_color) 
+        fillRegion(x,y-1,color);
+    if(getColor(x,y+1)==current_color) 
+        fillRegion(x,y+1,color);
+    if(getColor(x-1,y)==current_color) 
+        fillRegion(x-1,y,color);
+    if(getColor(x+1,y)==current_color) 
+        fillRegion(x+1,y,color);
 }
-
-/*void colorRegion(string x_,string y_,string color)
-{
-    int x,y;
-    if(isNumber(x_) && isNumber(y_))
-        x=stoi(x_),y=stoi(y_);
-    else{
-        cout << "Wrong parameters!" <<endl;
-        return;
-    }
-
-    char old_color=img[x-1][y-1];
-    fillRegion(x-1,y-1,color,old_color);
-}*/
 
 void initializePicture(string m_,string n_)
 {
     m=stoi(m_), n=stoi(n_);
+
+    int i;
+
+    img=new string*[n];
+
+    for(i=0;i<n;i++)
+        img[i]=new string[m];
     
     int row,col;
     if(m>250 || m<1 || n>250 || n<1)
-        cout << "Wrong!" <<endl;
+        return displayMessage();
 
     for(row=0;row<n;row++){
         for(col=0;col<m;col++){
@@ -132,8 +113,7 @@ void colorVerticalSegment(string x_,string y1_,string y2_,string color)
     if(isNumber(x_) && isNumber(y1_) && isNumber(y2_))
         x=stoi(x_), y1=stoi(y1_),y2=stoi(y2_);
     else{
-        cout << "Wrong parameters!" <<endl;
-        return;
+        return displayMessage();
     }
    
     int r;
@@ -147,8 +127,7 @@ void colorHorizontalSegment(string x1_,string x2_,string y_,string color)
     if(isNumber(x1_) && isNumber(x2_) && isNumber(y_))
         x1=stoi(x1_), x2=stoi(x2_),y=stoi(y_);
     else{
-        cout << "Wrong parameters!" <<endl;
-        return;
+        return displayMessage();
     }
             
     int c;
@@ -197,7 +176,7 @@ int main()
             colorHorizontalSegment(tokenized[1],tokenized[2],tokenized[3],tokenized[4]);
             break;
         case 'F':
-            fillRegion(stoi(tokenized[1])-1,stoi(tokenized[2])-1,tokenized[3],img[stoi(tokenized[1])-1][stoi(tokenized[2])-1]);
+            fillRegion(stoi(tokenized[1])-1,stoi(tokenized[2])-1,tokenized[3]);
             break;
         case 'S':
             showPicture();
