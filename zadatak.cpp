@@ -17,7 +17,7 @@ bool validCoordinates(int x,int y){
     return (x<n && x>=0 && y<m && y>=0);
 }
 
-void displayMessage(){
+void displayWrongParametersMessage(){
     cout << "Wrong parameters!" <<endl;
 }
 
@@ -37,7 +37,7 @@ vector<string> tokenize(string const & str, char delimiter)
 
 void colorPixel(int x,int y,string color){
     if(!validCoordinates(x,y)){
-        return displayMessage();
+        return displayWrongParametersMessage();
     }
 
     img[x][y]=color;
@@ -70,7 +70,9 @@ void fillRegion(int x,int y,string color)
 void initializePicture(string m_,string n_)
 {
     m=stoi(m_), n=stoi(n_);
-
+    int row,col;
+    if(m>250 || m<1 || n>250 || n<1)
+        return displayWrongParametersMessage();
     int i;
 
     img=new string*[n];
@@ -78,9 +80,7 @@ void initializePicture(string m_,string n_)
     for(i=0;i<n;i++)
         img[i]=new string[m];
     
-    int row,col;
-    if(m>250 || m<1 || n>250 || n<1)
-        return displayMessage();
+    
 
     for(row=0;row<n;row++){
         for(col=0;col<m;col++){
@@ -113,7 +113,7 @@ void colorVerticalSegment(string x_,string y1_,string y2_,string color)
     if(isNumber(x_) && isNumber(y1_) && isNumber(y2_))
         x=stoi(x_), y1=stoi(y1_),y2=stoi(y2_);
     else{
-        return displayMessage();
+        return displayWrongParametersMessage();
     }
    
     int r;
@@ -127,7 +127,7 @@ void colorHorizontalSegment(string x1_,string x2_,string y_,string color)
     if(isNumber(x1_) && isNumber(x2_) && isNumber(y_))
         x1=stoi(x1_), x2=stoi(x2_),y=stoi(y_);
     else{
-        return displayMessage();
+        return displayWrongParametersMessage();
     }
             
     int c;
