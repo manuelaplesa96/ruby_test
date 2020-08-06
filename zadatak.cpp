@@ -9,7 +9,7 @@ using namespace std;
 using std::string;
 
 
-int m,n;
+int m=250,n=250;
 char img[250][250];
 
 vector<string> tokenize(string const & str, char delimiter)
@@ -27,6 +27,12 @@ vector<string> tokenize(string const & str, char delimiter)
 }
 
 void colorPixel(int x,int y,string color){
+    cout << x << " " << y <<endl;
+    if(x<0 || x>n || y<0 || y>m){
+        cout << "Wrong parameters!" <<endl;
+        return;
+    }
+
     img[x][y]=color[0];
 }
 
@@ -104,13 +110,11 @@ void colorVerticalSegment(string x_,string y1_,string y2_,string color)
         cout << "Wrong parameters!" <<endl;
         return;
     }
-    
-    if(x>n || x<1 || y1>m || y1<1 || y2>m || y2<1)
-        cout << "Wrong!" <<endl;
-            
+   
     int r;
-    for(r=y1-1;r<y2;r++)
-        colorPixel(r,x-1,color);
+    for(r=y1-1;r<y2;r++){
+        cout << "tu" <<endl;
+        colorPixel(r,x-1,color);} 
 }
 
 void colorHorizontalSegment(string x1_,string x2_,string y_,string color)
@@ -122,9 +126,6 @@ void colorHorizontalSegment(string x1_,string x2_,string y_,string color)
         cout << "Wrong parameters!" <<endl;
         return;
     }
-
-    if(x1>n || x2<1 || x2>n || x2<1 || y>m || y<1)
-        cout << "Wrong!" <<endl;
             
     int c;
     for(c=x1-1;c<x2;c++)
